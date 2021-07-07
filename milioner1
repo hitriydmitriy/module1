@@ -1,0 +1,16 @@
+import pandas as pd
+df = pd.read_csv('C:\Games/movie_bd_v5.xls')
+df['profit'] = df.revenue - df.budget
+df.profit.max()
+df2 = df[df.profit == 2544505847]
+df2
+#profit to add
+
+
+import pandas as pd
+df = pd.read_csv('C:\Games/movie_bd_v5.xls')
+df['profit'] = df.revenue - df.budget
+df2 = df[(df.release_year >= 2012) & (df.release_year <= 2014)]
+df2.profit.min()
+df3 = df2[df2.profit == -165710090]
+df3
