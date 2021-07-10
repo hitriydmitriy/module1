@@ -14,3 +14,272 @@ df2 = df[(df.release_year >= 2012) & (df.release_year <= 2014)]
 df2.profit.min()
 df3 = df2[df2.profit == -165710090]
 df3
+
+
+
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from collections import Counter
+
+data = pd.read_csv('movie_bd_v5.csv')
+data.sample(5)
+
+data.describe()
+
+# Предобработка
+
+answers = {} # создадим словарь для ответов
+
+# тут другие ваши предобработки колонок например:
+
+#the time given in the dataset is in string format.
+#So we need to change this in datetime format
+# ...
+
+# 1. У какого фильма из списка самый большой бюджет?
+
+Использовать варианты ответов в коде решения запрещено.    
+Вы думаете и в жизни у вас будут варианты ответов?)
+
+# в словарь вставляем номер вопроса и ваш ответ на него
+# Пример: 
+answers['1'] = '2. Spider-Man 3 (tt0413300)'
+# запишите свой вариант ответа
+answers['1'] = '...'
+# если ответили верно, можете добавить комментарий со значком "+"
+
+# тут пишем ваш код для решения данного вопроса:
+
+ВАРИАНТ 2
+
+# можно добавлять разные варианты решения
+
+# 2. Какой из фильмов самый длительный (в минутах)?
+
+# думаю логику работы с этим словарем вы уже поняли, 
+# по этому не буду больше его дублировать
+answers['2'] = '...'
+
+
+
+# 3. Какой из фильмов самый короткий (в минутах)?
+
+
+
+
+
+
+
+# 4. Какова средняя длительность фильмов?
+
+
+
+
+# 5. Каково медианное значение длительности фильмов? 
+
+
+
+# 6. Какой самый прибыльный фильм?
+#### Внимание! Здесь и далее под «прибылью» или «убытками» понимается разность между сборами и бюджетом фильма. (прибыль = сборы - бюджет) в нашем датасете это будет (profit = revenue - budget) 
+
+# лучше код получения столбца profit вынести в Предобработку что в начале
+
+# 7. Какой фильм самый убыточный? 
+
+
+
+# 8. У скольких фильмов из датасета объем сборов оказался выше бюджета?
+
+
+
+# 9. Какой фильм оказался самым кассовым в 2008 году?
+
+
+
+# 10. Самый убыточный фильм за период с 2012 по 2014 г. (включительно)?
+
+
+
+
+# 11. Какого жанра фильмов больше всего?
+
+# эту задачу тоже можно решать разными подходами, попробуй реализовать разные варианты
+# если будешь добавлять функцию - выноси ее в предобработку что в начале
+
+ВАРИАНТ 2
+
+import pandas as pd
+df = pd.read_csv('C:\Games/movie_bd_v5.xls')
+genre = set(df.genres.str.split('|').sum())
+df2 = df[df.genres.str.contains('Action')]
+df
+
+# 12. Фильмы какого жанра чаще всего становятся прибыльными? 
+
+import pandas as pd
+df = pd.read_csv('C:\Games/movie_bd_v5.xls')
+df['profit'] = df['revenue'] - df['budget']
+df_prof = df[df['profit']>0]
+pd.Series(df_prof.genres.str.split('|').sum()).value_counts().index[0]
+
+# 13. У какого режиссера самые большие суммарные кассовые сборы?
+
+import pandas as pd
+df = pd.read_csv('C:\Games/movie_bd_v5.xls')
+directors = set(df.director.str.split('|').sum())
+pd.Series({x:df[df.director.str.contains(x)].revenue.sum() for x in directors}).sort_values(ascending = False)
+        
+
+# 14. Какой режисер снял больше всего фильмов в стиле Action?
+
+import pandas as pd
+df = pd.read_csv('C:\Games/movie_bd_v5.xls')
+directors = set(df.director.str.split('|').sum())
+genre = set(df.genres.str.split('|').sum())
+df2 = df[df.genres.str.contains('Action')]
+pd.Series({x:df2[df2.director.str.contains(x)].revenue.count() for x in directors}).sort_values( ascending = False )
+
+# 15. Фильмы с каким актером принесли самые высокие кассовые сборы в 2012 году? 
+
+import pandas as pd
+df = pd.read_csv('C:\Games/movie_bd_v5.xls')
+actors = set(df.cast.str.split('|').sum())
+df2 = df[df['release_year'] == 2012]
+pd.Series({x:df2[df2.cast.str.contains(x)].revenue.sum() for x in actors}).sort_values( ascending = False )
+
+# 16. Какой актер снялся в большем количестве высокобюджетных фильмов?
+
+import pandas as pd
+df = pd.read_csv('C:\Games/movie_bd_v5.xls')
+actors = set(df.cast.str.split('|').sum())
+df2 = df[df['budget'] > df['budget'].mean()]
+pd.Series({x:df2[df2.cast.str.contains(x)].revenue.count() for x in actors}).sort_values( ascending = False )
+
+# 17. В фильмах какого жанра больше всего снимался Nicolas Cage? 
+
+import pandas as pd
+df = pd.read_csv('C:\Games/movie_bd_v5.xls')
+actors = set(df.cast.str.split('|').sum())
+genre = set(df.genres.str.split('|').sum())
+df2 = df[df.cast.str.contains('Nicolas Cage')]
+pd.Series({x:df2[df2.genres.str.contains(x)].revenue.count() for x in genre}).sort_values( ascending = False )
+
+# 18. Самый убыточный фильм от Paramount Pictures
+
+import pandas as pd
+df = pd.read_csv('C:\Games/movie_bd_v5.xls')
+companies = set(df.production_companies.str.split('|').sum())
+df['profit'] = ( df['revenue'] - df['budget'])
+df2 = df[df.production_companies.str.contains('Paramount Pictures')]
+df2.sort_values('profit', ascending = True)
+
+# 19. Какой год стал самым успешным по суммарным кассовым сборам?
+
+import pandas as pd
+df = pd.read_csv('C:\Games/movie_bd_v5.xls')
+pivot = df.pivot_table(index = 'release_year', values = 'revenue')
+pivot.revenue.sort_values(ascending = False)
+
+# 20. Какой самый прибыльный год для студии Warner Bros?
+
+import pandas as pd
+df = pd.read_csv('C:\Games/movie_bd_v5.xls')
+df['profit'] = ( (df['revenue'] - df['budget'])/1000000)
+df2 = df[df.production_companies.str.contains('Warner Bros')]
+df2 = df2.groupby(['release_year'])['profit'].sum().sort_values(ascending = False)
+df2
+
+# 21. В каком месяце за все годы суммарно вышло больше всего фильмов?
+
+import pandas as pd
+df = pd.read_csv('C:\Games/movie_bd_v5.xls')
+def months(x):
+    if '/' in x:
+        n = x.index('/')
+        return x[:n]
+df['release_month'] = df.release_date.apply(months)
+pivot = df.pivot_table(index = 'release_month', values = 'revenue', aggfunc='count')
+pivot.revenue.sort_values(ascending = False)
+
+# 22. Сколько суммарно вышло фильмов летом? (за июнь, июль, август)
+
+import pandas as pd
+df = pd.read_csv('C:\Games/movie_bd_v5.xls')
+def months(x):
+    if '/' in x:
+        n = x.index('/')
+        return x[:n]
+df['release_month'] = df.release_date.apply(months)
+df['release_month'] = pd.to_numeric(df['release_month'])
+df2 = df.query('6 <= release_month <= 8')
+pivot = df2.pivot_table(index = 'release_month', values = 'revenue', aggfunc='count')
+pivot.revenue.sum()
+
+# 23. Для какого режиссера зима – самое продуктивное время года? 
+
+import pandas as pd
+df = pd.read_csv('C:\Games/movie_bd_v5.xls')
+def months(x):
+    if '/' in x:
+        n = x.index('/')
+        return x[:n]
+df['release_month'] = df.release_date.apply(months)
+df['release_month'] = pd.to_numeric(df['release_month'])
+directors = set(df.director.str.split('|').sum())
+df2 = df.query('release_month <= 2 or release_month == 12')
+pd.Series({x:df2[df2.director.str.contains(x)].revenue.count() for x in directors}).sort_values( ascending = False )
+
+# 24. Какая студия дает самые длинные названия своим фильмам по количеству символов?
+
+import pandas as pd
+df = pd.read_csv('C:\Games/movie_bd_v5.xls')
+studios = set(df.production_companies.str.split('|').sum())
+def leng(s):
+    n = s.split()
+    return len(s)
+df['length'] = df.original_title.apply(leng)
+pd.Series({x:df[df.production_companies.str.contains(x)].length.mean() for x in studios}).sort_values( ascending = False )
+
+# 25. Описание фильмов какой студии в среднем самые длинные по количеству слов?
+
+import pandas as pd
+df = pd.read_csv('C:\Games/movie_bd_v5.xls')
+studios = set(df.production_companies.str.split('|').sum())
+def length(s):
+    n = s.split()
+    return len(n)
+df['length_descirption'] = df.overview.apply(length)
+pd.Series({x:df[df.production_companies.str.contains(x)].length_descirption.mean() for x in studios}).sort_values( ascending = False )
+
+# 26. Какие фильмы входят в 1 процент лучших по рейтингу? 
+по vote_average
+
+import pandas as pd
+df = pd.read_csv('C:\Games/movie_bd_v5.xls')
+#df.vote_average.max()
+df[df.vote_average > df.vote_average.quantile(0.99)]
+
+# 27. Какие актеры чаще всего снимаются в одном фильме вместе?
+
+
+import pandas as pd
+import itertools as it
+df = pd.read_csv('C:\Games/movie_bd_v5.xls')
+df['cast'] = df.cast.str.split('|')
+df.cast = df.cast.apply(lambda x:list(it.combinations(x,2)))
+df.explode('cast').cast.mode()
+#pd.Series({x:df2[df2.cast.str.contains(x)].revenue.count() for x in actors}).sort_values( ascending = False )
+
+
+# Submission
+
+# в конце можно посмотреть свои ответы к каждому вопросу
+answers
+
+# и убедиться что ни чего не пропустил)
+len(answers)
+
+
+
